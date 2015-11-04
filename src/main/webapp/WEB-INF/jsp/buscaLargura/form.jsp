@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 	<head>
 		<title>Algoritmos de Grafo</title>
@@ -19,9 +21,11 @@
 			</div>
 		</nav>
 		<div class="container">
-			<div class="alert alert-danger" role="alert">
-	  			${erro}
-			</div>
+			<c:if test="${erro != null}">
+				<div class="alert alert-danger" role="alert">
+		  			${erro}
+				</div>
+			</c:if>
 			<div class="panel panel-default">
 			  	<div class="panel-heading">
 			  		Algoritmo de busca em largura
@@ -40,6 +44,22 @@
 			  		</form>
 			  	</div>
 			</div>
+			<c:if test="${resultados != null  }">
+				<div class="panel panel-default">
+				  	<div class="panel-heading">
+				  		Resultado do algoritmo
+				  	</div>
+				  	<div class="panel-body">
+						<ul class="list-group">
+							<c:forEach var="item" items="${resultados }">
+						  		<li class="list-group-item">
+						  			<c:out value="Distância para ${item.vertice }: ${item.numSaltos }"></c:out>
+						  		</li>
+							</c:forEach>
+						</ul>
+				  	</div>
+				</div>
+			</c:if>
 		</div>
 	    <script src="/resources/js/jquery-2.1.4.js"></script>
 	    <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
