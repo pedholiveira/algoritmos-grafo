@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="busca-largura-web">
+    <wb-module deploy-name="algoritmos-grafo">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <property name="context-root" value="ROOT"/>
-        <property name="java-output-path" value="/busca-largura-web/target/classes"/>
+        <property name="java-output-path" value="/algoritmos-grafo/target/classes"/>
     </wb-module>
 </project-modules>

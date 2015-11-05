@@ -50,7 +50,7 @@ public class BuscaLarguraService implements IBuscaLarguraService {
 					resultadosMap.remove(nome);
 				} 
 				
-				resultadosMap.put(nome, numSaltos);
+				resultadosMap.putIfAbsent(nome, numSaltos);
 				fila.add(membro);
 			}
 		}
