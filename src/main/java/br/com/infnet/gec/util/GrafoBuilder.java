@@ -61,17 +61,17 @@ public abstract class GrafoBuilder {
 	private static Set<Aresta> lerArestas(String textoVertices) {
 		Set<Aresta> arestas = new HashSet<Aresta>();
 		Map<String, Vertice> vertices = new HashMap<String, Vertice>();
-		
+
 		Matcher matcher = Pattern.compile(ARESTA_FORMAT_REGEX).matcher(textoVertices);
 		while(matcher.find()) {
 			String[] nomesArestas = matcher.group(1).split(",");
 			String nomeU = nomesArestas[0];
 			String nomeV = nomesArestas[1];
-			
+
 			Vertice u = vertices.containsKey(nomeU) ? vertices.get(nomeU) : new Vertice(nomeU);
 			Vertice v = vertices.containsKey(nomeV) ? vertices.get(nomeV) : new Vertice(nomeV);
 			u.getMembros().add(v);
-			
+
 			vertices.putIfAbsent(u.getNome(), u);
 			vertices.putIfAbsent(v.getNome(), v);
 			

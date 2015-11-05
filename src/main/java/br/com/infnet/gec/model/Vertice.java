@@ -11,8 +11,8 @@ import java.util.List;
 public class Vertice {
 	private String nome;
 	private List<Vertice> membros = new ArrayList<Vertice>();
-	private int numSaltos = 0;
-
+	private int numSaltos;
+	
 	public Vertice() {
 	}
 	
@@ -31,15 +31,15 @@ public class Vertice {
 	public List<Vertice> getMembros() {
 		return membros;
 	}
-
+	
 	public int getNumSaltos() {
 		return numSaltos;
 	}
-
+	
 	public void setNumSaltos(int numSaltos) {
 		this.numSaltos = numSaltos;
 	}
-	
+
 	@Override
 	public String toString() {
 		return nome;
