@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Busca em Largura</title>
+		<title>Busca em Profundidade</title>
 		
 		<link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		
@@ -23,11 +23,11 @@
 			</c:if>
 			<div class="panel panel-default">
 			  	<div class="panel-heading">
-			  		Algoritmo de Busca em Largura
+			  		Algoritmo de Busca em Profundidade
 			  	</div>
 			  	
 			  	<div class="panel-body">
-					<form method="post" action="/buscaLargura/executar">
+					<form method="post" action="/buscaProfundidade/executar">
 						<div class="form-group">
 					   		<label for="vertices">Vertices</label>
 					  		<input id="vertices" name="vertices" type="text" class="form-control" placeholder="A, B, C, D, E">
@@ -61,6 +61,7 @@
 				</div>
 			</c:if>
 		</div>
+	    
 	    <script src="/resources/js/jquery-2.1.4.js"></script>
 	    <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
 	</body>

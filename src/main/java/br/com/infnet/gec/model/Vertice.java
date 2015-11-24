@@ -11,6 +11,7 @@ import java.util.List;
 public class Vertice {
 	private String nome;
 	private List<Vertice> membros = new ArrayList<Vertice>();
+	private boolean visitado;
 	private int numSaltos;
 	
 	public Vertice() {
@@ -40,6 +41,14 @@ public class Vertice {
 		this.numSaltos = numSaltos;
 	}
 
+	public boolean isVisitado() {
+		return visitado;
+	}
+
+	public void setVisitado(boolean visitado) {
+		this.visitado = visitado;
+	}
+	
 	@Override
 	public String toString() {
 		return nome;

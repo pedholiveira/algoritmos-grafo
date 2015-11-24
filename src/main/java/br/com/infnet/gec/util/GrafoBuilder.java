@@ -1,13 +1,15 @@
 package br.com.infnet.gec.util;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import br.com.infnet.gec.exception.GrafoFormatoException;
+import br.com.infnet.gec.exception.FormatoArestasException;
+import br.com.infnet.gec.exception.FormatoVerticesException;
 import br.com.infnet.gec.exception.RaizNaoEncontradaException;
 import br.com.infnet.gec.model.Aresta;
 import br.com.infnet.gec.model.Grafo;
@@ -19,8 +21,9 @@ import br.com.infnet.gec.model.Vertice;
  * @author Pedro Henrique
  */
 public abstract class GrafoBuilder {
-	private static final String GRAFO_FORMAT_REGEX = "(\\(([a-zA-Z]\\,[a-zA-Z])\\))+";
-	private static final String ARESTA_FORMAT_REGEX = "([a-zA-Z]\\,[a-zA-Z])+";
+	private static final String VERTICES_FORMAT_REGEX = "([a-zA-Z](\\, )?)+";
+	private static final String ARESTAS_FORMAT_REGEX = "(\\[([a-zA-Z]\\,[a-zA-Z])\\])+";
+	private static final String EXTRACT_ARESTAS_REGEX = "\\[([a-zA-Z]\\,[a-zA-Z])\\]";
 	
 	/**
 	 * Cria um objeto do tipo {@link Grafo}.
@@ -30,46 +33,47 @@ public abstract class GrafoBuilder {
 	 * @return
 	 * @throws Exception 
 	 */
-	public static Grafo criarGrafo(String verticeRaiz, String textoVertices) throws Exception {
+	public static Grafo criarGrafo(String verticeRaiz, String textoVertices, String arestas) throws Exception {
 		Grafo grafo = new Grafo();
+		carregarVertices(grafo, textoVertices);
+		carregarArestas(grafo, arestas);
+
+		Vertice raiz = grafo.getVertices()
+							.stream()
+							.filter(v -> v.getNome().equals(verticeRaiz))
+							.findAny()
+							.orElseThrow(RaizNaoEncontradaException::new);
 		
-		if(Pattern.matches(GRAFO_FORMAT_REGEX, textoVertices)) {
-			Set<Aresta> arestas = lerArestas(textoVertices);
-			Set<Vertice> vertices = lerVertices(arestas);
-
-			Vertice raiz = vertices.stream()
-									.filter(v -> v.getNome().equals(verticeRaiz))
-									.findAny()
-									.orElseThrow(RaizNaoEncontradaException::new);
-
-			grafo.setArestas(arestas);
-			grafo.setVertices(vertices);
-			grafo.setVerticeRaiz(raiz);
-		} else {
-			throw new GrafoFormatoException();
-		}
+		grafo.setVerticeRaiz(raiz);
 		
 		return grafo;
 	}
 	
 	/**
-	 * Retorna um Set com todas as arestas presentes no Grafo.
+	 * Carrega um Set das arestas no Grafo.
 	 * 
-	 * @param matcher
-	 * @return
+	 * @param grafo
+	 * @param arestas
+	 * @throws FormatoArestasException 
 	 */
-	private static Set<Aresta> lerArestas(String textoVertices) {
-		Set<Aresta> arestas = new HashSet<Aresta>();
-		Map<String, Vertice> vertices = new HashMap<String, Vertice>();
+	private static void carregarArestas(Grafo grafo, String textArestas) throws FormatoArestasException {
+		if(!Pattern.matches(ARESTAS_FORMAT_REGEX, textArestas))
+			throw new FormatoArestasException(); 
 		
-		Matcher matcher = Pattern.compile(ARESTA_FORMAT_REGEX).matcher(textoVertices);
+		Matcher matcher = Pattern.compile(EXTRACT_ARESTAS_REGEX).matcher(textArestas);
+
+		Set<Aresta> arestas = new HashSet<Aresta>();
+		Map<String, Vertice> vertices = grafo.getVertices()
+												.stream()
+												.collect(Collectors.toMap(Vertice::getNome, Function.identity()));
+		
 		while(matcher.find()) {
 			String[] nomesArestas = matcher.group(1).split(",");
 			String nomeU = nomesArestas[0];
 			String nomeV = nomesArestas[1];
 			
-			Vertice u = vertices.containsKey(nomeU) ? vertices.get(nomeU) : new Vertice(nomeU);
-			Vertice v = vertices.containsKey(nomeV) ? vertices.get(nomeV) : new Vertice(nomeV);
+			Vertice u = vertices.get(nomeU);
+			Vertice v = vertices.get(nomeV);
 			u.getMembros().add(v);
 			
 			vertices.putIfAbsent(u.getNome(), u);
@@ -78,23 +82,27 @@ public abstract class GrafoBuilder {
 			arestas.add(new Aresta(u, v));
 		}
 		
-		return arestas;
+		grafo.setArestas(arestas);
 	}
 
 	/**
-	 * Retorna um Set com todos os vertices presentes no Grafo.
+	 * Carrega um Set de vértices no objeto do grafo.
 	 * 
-	 * @param arestas
-	 * @return
+	 * @param grafo
+	 * @param textoVertices
+	 * @throws FormatoVerticesException 
 	 */
-	private static Set<Vertice> lerVertices(Set<Aresta> arestas) {
-		Set<Vertice> vertices = new HashSet<Vertice>();
+	private static void carregarVertices(Grafo grafo, String textoVertices) throws FormatoVerticesException {
+		if(!Pattern.matches(VERTICES_FORMAT_REGEX, textoVertices))
+			throw new FormatoVerticesException();
 		
-		for (Aresta aresta : arestas) {
-			vertices.add(aresta.getU());
-			vertices.add(aresta.getV());
+		Set<Vertice> verticesSet = new HashSet<Vertice>();
+		String[] vertices = textoVertices.split(", ");
+		
+		for (String vertice : vertices) {
+			verticesSet.add(new Vertice(vertice));
 		}
 		
-		return vertices;
+		grafo.setVertices(verticesSet);
 	}
 }

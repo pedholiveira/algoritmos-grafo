@@ -11,5 +11,12 @@ import br.com.infnet.gec.model.Grafo;
  * @author Pedro Henrique
  */
 public interface IBuscaLarguraService {
+	
+	/**
+	 * Realiza a execução do algoritmo.
+	 * 
+	 * @param grafo
+	 * @return
+	 */
 	public List<ResultadoBuscaLarguraDTO> executarAlgoritmo(Grafo grafo);
 }

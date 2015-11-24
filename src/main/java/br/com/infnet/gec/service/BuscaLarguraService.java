@@ -37,12 +37,16 @@ public class BuscaLarguraService implements IBuscaLarguraService {
 
 		while (fila.size() > 0) {
 			Vertice v = fila.remove();
+			v.setVisitado(true);
 
 			if (v.getMembros().isEmpty())
 				continue;
 
 			int numSaltos = v.getNumSaltos() + 1;
 			for (Vertice membro : v.getMembros()) {
+				if(membro.isVisitado())
+					continue;
+				
 				String nome = membro.getNome();
 				membro.setNumSaltos(numSaltos);
 
