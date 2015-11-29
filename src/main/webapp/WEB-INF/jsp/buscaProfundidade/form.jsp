@@ -29,7 +29,7 @@
 			  	<div class="panel-body">
 					<form method="post" action="/buscaProfundidade/executar">
 						<div class="form-group">
-					   		<label for="vertices">Vertices</label>
+					   		<label for="vertices">Vértices</label>
 					  		<input id="vertices" name="vertices" type="text" class="form-control" placeholder="A, B, C, D, E">
 						</div>
 						<div class="form-group">
@@ -37,7 +37,7 @@
 					  		<input id="arestas" name="arestas" type="text" class="form-control" placeholder="[A,B][A,C][A,D][B,E]">
 						</div>
 					   	<div class="form-group">
-					   		<label for="verticeRaiz">Vértice raiz</label>
+					   		<label for="verticeRaiz">Vértice inicial</label>
 					  		<input id="verticeRaiz" name="verticeRaiz" type="text" class="form-control" placeholder="Vértice raiz" maxlength="1">
 						</div>
 						<button type="submit" class="btn btn-default">Executar</button>
@@ -53,7 +53,7 @@
 						<ul class="list-group">
 							<c:forEach var="item" items="${resultados }">
 						  		<li class="list-group-item">
-						  			<c:out value="Distância para ${item.vertice }: ${item.numSaltos }"></c:out>
+						  			<c:out value="Vértice ${item.vertice }: Previsit = ${item.preVisit } e Posvisit = ${item.posVisit }"></c:out>
 						  		</li>
 							</c:forEach>
 						</ul>

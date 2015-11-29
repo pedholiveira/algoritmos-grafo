@@ -2,20 +2,20 @@ package br.com.infnet.gec.dto;
 
 /**
  * Classe utilizada para a exibição do resultado do algoritmo de busca em
- * largura.
+ * profundidade.
  * 
  * @author Pedro Henrique
  */
 public class ResultadoBuscaProfundidadeDTO {
 	private String vertice;
-	private int numSaltos;
+	private int preVisit;
+	private int posVisit;
 
 	public ResultadoBuscaProfundidadeDTO() {
 	}
-	
-	public ResultadoBuscaProfundidadeDTO(String vertice, int numSaltos) {
+
+	public ResultadoBuscaProfundidadeDTO(String vertice) {
 		this.vertice = vertice;
-		this.numSaltos = numSaltos;
 	}
 
 	public String getVertice() {
@@ -26,11 +26,19 @@ public class ResultadoBuscaProfundidadeDTO {
 		this.vertice = vertice;
 	}
 
-	public int getNumSaltos() {
-		return numSaltos;
+	public int getPreVisit() {
+		return preVisit;
 	}
 
-	public void setNumSaltos(int numSaltos) {
-		this.numSaltos = numSaltos;
+	public void setPreVisit(int preVisit) {
+		this.preVisit = preVisit;
+	}
+
+	public int getPosVisit() {
+		return posVisit;
+	}
+
+	public void setPosVisit(int posVisit) {
+		this.posVisit = posVisit;
 	}
 }
