@@ -9,9 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import br.com.infnet.gec.exception.FormatoArestasException;
-import br.com.infnet.gec.exception.FormatoVerticesException;
-import br.com.infnet.gec.exception.RaizNaoEncontradaException;
+import br.com.infnet.gec.exception.RegraNegocioException;
 import br.com.infnet.gec.model.Aresta;
 import br.com.infnet.gec.model.Grafo;
 import br.com.infnet.gec.model.Vertice;
@@ -43,7 +41,7 @@ public abstract class GrafoUtils {
 							.stream()
 							.filter(v -> v.getNome().equals(verticeRaiz))
 							.findAny()
-							.orElseThrow(RaizNaoEncontradaException::new);
+							.orElseThrow(() -> new RegraNegocioException(Messages.VERTICE_RAIZ_NAO_ENCONTRADO));
 		
 		grafo.setVerticeRaiz(raiz);
 		
@@ -92,11 +90,11 @@ public abstract class GrafoUtils {
 	 * 
 	 * @param grafo
 	 * @param arestas
-	 * @throws FormatoArestasException 
+	 * @throws RegraNegocioException 
 	 */
-	private static void carregarArestas(Grafo grafo, String textArestas) throws FormatoArestasException {
+	private static void carregarArestas(Grafo grafo, String textArestas) throws RegraNegocioException {
 		if(!Pattern.matches(ARESTAS_FORMAT_REGEX, textArestas))
-			throw new FormatoArestasException(); 
+			throw new RegraNegocioException(Messages.FORMATO_ARESTAS_INCORRETO); 
 		
 		Matcher matcher = Pattern.compile(EXTRACT_ARESTAS_REGEX).matcher(textArestas);
 
@@ -105,7 +103,13 @@ public abstract class GrafoUtils {
 												.stream()
 												.collect(Collectors.toMap(Vertice::getNome, Function.identity()));
 		
+		int count = 0;
 		while(matcher.find()) {
+			count++;
+			if(count > 20) {
+				throw new RegraNegocioException(Messages.NUM_ARESTAS_EXCEDIDO);
+			}
+			
 			String[] nomesArestas = matcher.group(1).split(",");
 			String nomeU = nomesArestas[0];
 			String nomeV = nomesArestas[1];
@@ -128,14 +132,19 @@ public abstract class GrafoUtils {
 	 * 
 	 * @param grafo
 	 * @param textoVertices
-	 * @throws FormatoVerticesException 
+	 * 
+	 * @throws RegraNegocioException 
 	 */
-	private static void carregarVertices(Grafo grafo, String textoVertices) throws FormatoVerticesException {
+	private static void carregarVertices(Grafo grafo, String textoVertices) throws RegraNegocioException {
 		if(!Pattern.matches(VERTICES_FORMAT_REGEX, textoVertices))
-			throw new FormatoVerticesException();
+			throw new RegraNegocioException(Messages.FORMATO_VERTICES_INCORRETO);
 		
 		Set<Vertice> verticesSet = new HashSet<Vertice>();
 		String[] vertices = textoVertices.split(", ");
+		
+		if(vertices.length > 10) {
+			throw new RegraNegocioException(Messages.NUM_VERTICES_EXCEDIDO);
+		}
 		
 		for (String vertice : vertices) {
 			verticesSet.add(new Vertice(vertice));
