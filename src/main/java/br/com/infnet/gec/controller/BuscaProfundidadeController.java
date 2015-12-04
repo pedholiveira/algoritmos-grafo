@@ -13,7 +13,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.infnet.gec.dto.ResultadoBuscaProfundidadeDTO;
 import br.com.infnet.gec.model.Grafo;
 import br.com.infnet.gec.service.IBuscaProfundidadeService;
-import br.com.infnet.gec.util.GrafoBuilder;
+import br.com.infnet.gec.util.GrafoUtils;
 
 @Controller
 @Path("/buscaProfundidade")
@@ -32,7 +32,7 @@ public class BuscaProfundidadeController {
 							@FormParam("vertices") String vertices, 
 							@FormParam("arestas") String arestas) {
 		try {
-			Grafo grafo = GrafoBuilder.criarGrafo(verticeRaiz, vertices, arestas);
+			Grafo grafo = GrafoUtils.criarGrafo(verticeRaiz, vertices, arestas);
 			List<ResultadoBuscaProfundidadeDTO> resultados = service.executarAlgoritmo(grafo);
 			
 			result.include("resultados", resultados);

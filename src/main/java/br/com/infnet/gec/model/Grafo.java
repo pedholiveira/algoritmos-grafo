@@ -3,7 +3,7 @@ package br.com.infnet.gec.model;
 import java.util.Set;
 
 /**
- * Representa um Grafo.
+ * Representação de um Grafo.
  * 
  * @author Pedro Henrique
  */

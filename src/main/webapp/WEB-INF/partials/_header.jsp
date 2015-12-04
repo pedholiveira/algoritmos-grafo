@@ -12,7 +12,7 @@
        				<a href="/buscaProfundidade">Busca em Profundidade</a>
        			</li>
        			<li>
-       				<a href="#">Algoritmo de Dijkstra</a>
+       				<a href="/dijkstra">Algoritmo de Dijkstra</a>
        			</li>
        		</ul>
 	    </div>

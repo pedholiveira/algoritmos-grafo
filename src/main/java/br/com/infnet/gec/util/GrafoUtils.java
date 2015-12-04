@@ -1,6 +1,7 @@
 package br.com.infnet.gec.util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -16,11 +17,11 @@ import br.com.infnet.gec.model.Grafo;
 import br.com.infnet.gec.model.Vertice;
 
 /**
- * Classe responsável por criar um objeto do tipo {@link Grafo}.
+ * Classe utilitária responsável por manipulações no objeto {@link Grafo}.
  * 
  * @author Pedro Henrique
  */
-public abstract class GrafoBuilder {
+public abstract class GrafoUtils {
 	private static final String VERTICES_FORMAT_REGEX = "([a-zA-Z](\\, )?)+";
 	private static final String ARESTAS_FORMAT_REGEX = "(\\[([a-zA-Z]\\,[a-zA-Z])\\])+";
 	private static final String EXTRACT_ARESTAS_REGEX = "\\[([a-zA-Z]\\,[a-zA-Z])\\]";
@@ -47,6 +48,43 @@ public abstract class GrafoBuilder {
 		grafo.setVerticeRaiz(raiz);
 		
 		return grafo;
+	}
+	
+	/**
+	 * Recebe um {@link List} de objetos do tipo {@link Vertice} e 
+	 * retorna um novo {@link List} ordenado deles.
+	 * 
+	 * @param vertices
+	 * @return
+	 */
+	public static List<Vertice> obterVerticesOrdenados(List<Vertice> vertices) {
+		return vertices.stream()
+						.sorted((v1, v2) -> v1.getNome().compareTo(v2.getNome()))
+						.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Recebe um {@link Set} de objetos do tipo {@link Vertice} e 
+	 * retorna um {@link List} ordenado deles.
+	 * 
+	 * @param vertices
+	 * @return
+	 */
+	public static List<Vertice> obterVerticesOrdenados(Set<Vertice> vertices) {
+		return vertices.stream()
+						.sorted((v1, v2) -> v1.getNome().compareTo(v2.getNome()))
+						.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Recebe um {@link Grafo} e retorna uma {@link List} 
+	 * com os seus vertices ordenados.
+	 * 
+	 * @param grafo
+	 * @return
+	 */
+	public static List<Vertice> obterVerticesOrdenados(Grafo grafo) {
+		return obterVerticesOrdenados(grafo.getVertices());
 	}
 	
 	/**
