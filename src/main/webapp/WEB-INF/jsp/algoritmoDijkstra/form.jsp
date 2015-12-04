@@ -34,7 +34,7 @@
 						</div>
 						<div class="form-group">
 					   		<label for="arestas">Arestas</label>
-					  		<input id="arestas" name="arestas" type="text" class="form-control" placeholder="[A,B][A,C][A,D][B,E]">
+					  		<input id="arestas" name="arestas" type="text" class="form-control" placeholder="[A,B - 2][A,C - 8][A,D - 3][B,E - 5]">
 						</div>
 					   	<div class="form-group">
 					   		<label for="verticeRaiz">Vértice raiz</label>
