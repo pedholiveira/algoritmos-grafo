@@ -22,7 +22,9 @@ import br.com.infnet.gec.model.Vertice;
 public abstract class GrafoUtils {
 	private static final String VERTICES_FORMAT_REGEX = "([a-zA-Z](\\, )?)+";
 	private static final String ARESTAS_FORMAT_REGEX = "(\\[([a-zA-Z]\\,[a-zA-Z])\\])+";
+	private static final String ARESTAS_PESO_FORMAT_REGEX = "(\\[([a-zA-Z]\\,[a-zA-Z]) - (\\d)\\])+";
 	private static final String EXTRACT_ARESTAS_REGEX = "\\[([a-zA-Z]\\,[a-zA-Z])\\]";
+	private static final String EXTRACT_ARESTAS_PESO_REGEX = "\\[([a-zA-Z]\\,[a-zA-Z]) - (\\d)\\]";
 	
 	/**
 	 * Cria um objeto do tipo {@link Grafo}.
@@ -33,9 +35,22 @@ public abstract class GrafoUtils {
 	 * @throws Exception 
 	 */
 	public static Grafo criarGrafo(String verticeRaiz, String textoVertices, String arestas) throws Exception {
+		return criarGrafo(verticeRaiz, textoVertices, arestas, false);
+	}
+	
+	/**
+	 * Cria um objeto do tipo {@link Grafo}.
+	 * 
+	 * @param verticeRaiz
+	 * @param textoVertices
+	 * @param possuiPeso
+	 * @return
+	 * @throws Exception 
+	 */
+	public static Grafo criarGrafo(String verticeRaiz, String textoVertices, String arestas, boolean possuiPeso) throws Exception {
 		Grafo grafo = new Grafo();
 		carregarVertices(grafo, textoVertices);
-		carregarArestas(grafo, arestas);
+		carregarArestas(grafo, arestas, possuiPeso);
 
 		Vertice raiz = grafo.getVertices()
 							.stream()
@@ -86,17 +101,36 @@ public abstract class GrafoUtils {
 	}
 	
 	/**
+	 * Retorna um {@link List} com as arestas adjacentes de um {@link Vertice} 
+	 * pertencente à um {@link Grafo}.
+	 * 
+	 * @param vertice
+	 * @param grafo
+	 * @return
+	 */
+	public static List<Aresta> obterArestasAdjacentes(Vertice vertice, Grafo grafo) {
+		return grafo.getArestas()
+					.stream()
+					.filter(a -> a.getU().equals(vertice))
+					.sorted((a1, a2) -> a1.getV().getNome().compareTo(a2.getV().getNome()))
+					.collect(Collectors.toList());
+	}
+	
+	/**
 	 * Carrega um Set das arestas no Grafo.
 	 * 
 	 * @param grafo
 	 * @param arestas
 	 * @throws RegraNegocioException 
 	 */
-	private static void carregarArestas(Grafo grafo, String textArestas) throws RegraNegocioException {
-		if(!Pattern.matches(ARESTAS_FORMAT_REGEX, textArestas))
+	private static void carregarArestas(Grafo grafo, String textArestas, boolean possuiPeso) throws RegraNegocioException {
+		String formatRegex = possuiPeso ? ARESTAS_PESO_FORMAT_REGEX : ARESTAS_FORMAT_REGEX;
+		String extractRegex = possuiPeso ? EXTRACT_ARESTAS_PESO_REGEX : EXTRACT_ARESTAS_REGEX;
+		
+		if(!Pattern.matches(formatRegex, textArestas))
 			throw new RegraNegocioException(Messages.FORMATO_ARESTAS_INCORRETO); 
 		
-		Matcher matcher = Pattern.compile(EXTRACT_ARESTAS_REGEX).matcher(textArestas);
+		Matcher matcher = Pattern.compile(extractRegex).matcher(textArestas);
 
 		Set<Aresta> arestas = new HashSet<Aresta>();
 		Map<String, Vertice> vertices = grafo.getVertices()
@@ -111,6 +145,8 @@ public abstract class GrafoUtils {
 			}
 			
 			String[] nomesArestas = matcher.group(1).split(",");
+			int peso = possuiPeso ? Integer.valueOf(matcher.group(2)) : 1;
+			
 			String nomeU = nomesArestas[0];
 			String nomeV = nomesArestas[1];
 			
@@ -121,7 +157,7 @@ public abstract class GrafoUtils {
 			vertices.putIfAbsent(u.getNome(), u);
 			vertices.putIfAbsent(v.getNome(), v);
 			
-			arestas.add(new Aresta(u, v));
+			arestas.add(new Aresta(u, v, peso));
 		}
 		
 		grafo.setArestas(arestas);

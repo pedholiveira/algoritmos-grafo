@@ -32,7 +32,7 @@ public class AlgoritmoDijkstraController {
 							@FormParam("vertices") String vertices, 
 							@FormParam("arestas") String arestas) {
 		try {
-			Grafo grafo = GrafoUtils.criarGrafo(verticeRaiz, vertices, arestas);
+			Grafo grafo = GrafoUtils.criarGrafo(verticeRaiz, vertices, arestas, true);
 			List<ResultadoDijsktraDTO> resultados = service.executarAlgoritmo(grafo);
 			
 			result.include("resultados", resultados);

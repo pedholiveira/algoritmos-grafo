@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 
 import br.com.infnet.gec.dto.ResultadoDijsktraDTO;
+import br.com.infnet.gec.model.Aresta;
 import br.com.infnet.gec.model.Grafo;
 import br.com.infnet.gec.model.Vertice;
 import br.com.infnet.gec.util.GrafoUtils;
@@ -24,10 +25,12 @@ public class AlgoritmoDijkstraService implements IAlgoritmoDijkstraService {
 			Vertice verticeVerificador = obterVerticeVerificador(mapaInteracoes);
 			
 			int distancia = mapaInteracoes.get(verticeVerificador);
-			List<Vertice> membros = GrafoUtils.obterVerticesOrdenados(verticeVerificador.getMembros()); 
-
-			for (Vertice membro : membros) {
-				int distanciaMembro = distancia + 1;
+			List<Aresta> arestasAdjacentes = GrafoUtils.obterArestasAdjacentes(verticeVerificador, grafo);
+			
+			for (Aresta aresta : arestasAdjacentes) {
+				Vertice membro = aresta.getV();
+				
+				int distanciaMembro = distancia + aresta.getPeso();
 				
 				if(!mapaInteracoes.containsKey(membro)) {
 					continue;

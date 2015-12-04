@@ -13,4 +13,6 @@ public interface Messages {
 	public static final String NUM_VERTICES_EXCEDIDO = "O número de vértices não pode ser maior do que 10.";
 	
 	public static final String VERTICE_RAIZ_NAO_ENCONTRADO = "O vértice raiz informado não foi encontrado no grafo.";
+	
+	public static final String PESO_ARESTA_NEGATIVO = "O algoritmo de Dijkstra não suporta arestas com peso negativo.";
 }
